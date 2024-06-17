@@ -16,7 +16,8 @@ Concerns about using data from the Israeli et al paper and the Cunha et al paper
 
 ### Proposal
 
-Switch to characterizing the guides and performance in the Sanson paper.
+Explore count distribution from Sanson et al., 2018 and Israeli et al., 2022 as both have raw count data from the Brunello library, though they use different cell lines. 
+
 
 ## Info from papers
 
@@ -36,7 +37,6 @@ Switch to characterizing the guides and performance in the Sanson paper.
 
 ## Data files fro BioGRID ORCs and/or Papers
 
-|                     |                                         |                                                         |
 |                     | File                                    | Description                                             |
 |---------------------|-----------------------------------------|---------------------------------------------------------|
 | Cunha et al., 2023  | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
@@ -44,10 +44,10 @@ Switch to characterizing the guides and performance in the Sanson paper.
 | Israeli et al, 2022 | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
 |                     | PMID35469023-SuppData3.xlsx             | Supplemental table 3 MAGeCK output                      |
 |                     | GSE197962_sgRNA_counts.txt              | Guide counts from                                       |
-|                     | broadgpp-brunello-library-contents.txt  | guide-gene mapping                                      |
-|                     | brunello_plasmid_counts                 | Initial info on plasmid and guide counts in A375 screen |
+|                     | broadgpp-brunello-library-contents.txt  | guide-gene mapping                                     |
 | Sanson et al., 2018 | 41467_2018_7901_MOESMA_ESM.xlsx         | Supplmentary table 1 (raw counts for KO)                |
-|                     |  broadgpp-brunello-library-contents.txt | library info from AddGene                               |
+|                     | broadgpp-brunello-library-contents.txt | library info from AddGene                               |
+|                     | brunello_plasmid_counts                 | Initial info on plasmid and guide counts in A375 screen |
 
 ## Algorithms and approaches for analyzing CRISPR KO libraries
 
