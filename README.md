@@ -36,28 +36,18 @@ Switch to characterizing the guides and performance in the Sanson paper.
 
 ## Data files fro BioGRID ORCs and/or Papers
 
-|---------------------|-----------------------------------------|---------------------------------------------------------|
+|                     |                                         |                                                         |
 |                     | File                                    | Description                                             |
 |---------------------|-----------------------------------------|---------------------------------------------------------|
 | Cunha et al., 2023  | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
-|                     | jv.01276-23-s0004.xlsx                  | Supplemental table 4 (plasmid vs. d0 gene)\             |
-|                     |                                         | MAGeCK output                                           |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
+|                     | jv.01276-23-s0004.xlsx                  | Supplemental table 4 (plasmid vs. d0 gene) MAGeCK output |
 | Israeli et al, 2022 | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
-|---------------------|-----------------------------------------|---------------------------------------------------------| 
-|                     | PMID35469023-SuppData3.xlsx             | Supplemental table 3                                    |
-|                     |                                         |                                                         |
-|                     |                                         | MAGeCK output                                           |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
+|                     | PMID35469023-SuppData3.xlsx             | Supplemental table 3 MAGeCK output                      |
 |                     | GSE197962_sgRNA_counts.txt              | Guide counts from                                       |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
 |                     | broadgpp-brunello-library-contents.txt  | guide-gene mapping                                      |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
 |                     | brunello_plasmid_counts                 | Initial info on plasmid and guide counts in A375 screen |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
 | Sanson et al., 2018 | 41467_2018_7901_MOESMA_ESM.xlsx         | Supplmentary table 1 (raw counts for KO)                |
-|---------------------|-----------------------------------------|---------------------------------------------------------|
+|                     |  broadgpp-brunello-library-contents.txt | library info from AddGene                               |
 
 ## Algorithms and approaches for analyzing CRISPR KO libraries
 
