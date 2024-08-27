@@ -91,7 +91,7 @@ Bayesian method: model sgRNA efficiencies by obtaining information from multiple
 
 ### gscreend
 
-Focused on accurate modeling of read count distribution in SCRISPR screens. Compared abundance just from the culturing process- found that before/after ratios for control guides are not asymmetric in KO screens- influenced by cell proliferation and width of sgRNA abundance distribution- so a skew normal distribution is use to estimate the null distribution.
+Focused on accurate modeling of read count distribution in CRISPR screens. Compared abundance just from the culturing process- found that before/after ratios for control guides are not asymmetric in KO screens- influenced by cell proliferation and width of sgRNA abundance distribution- so a skew normal distribution is use to estimate the null distribution.
 
 ## Things that may impact the data
 
