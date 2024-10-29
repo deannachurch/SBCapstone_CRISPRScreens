@@ -1,36 +1,114 @@
 # SBCapstone_CRISPRScreens
 
-Goal of Capstone: investigate sensitivity and power of lethality based CRISPR screens. Focus on viability aspects of the screens.
+Identify features that predict essential and non-essential genes. 
 
-## Current issues
+## Background
 
-Concerns about using data from the Israeli et al paper and the Cunha et al paper:
+The CRISPR-Cas system has been revolutionary for science. The ability to knockout specific genes and then associate that gene with a
+phenotype is vital for functional studies. Many groups have turned to large-scale 'pooled' screens. In this case, the researcher
+attempts to knockout all (or at least most) protein coding genes in a cell. One phenotype that is easily assessed is viability. That is,
+if I knock this gene out, does the cell survive. This analysis is typically indirect. For most screens, multiple guides (the sequence
+that is used to target a specific gene) are used. Experiments are performed such that, on average, each cell only gets one guide. 
+Typically, multiple guides per gene are used. The logic is as follows:
 
--   Lack off access to raw count data from both studies
+* Get the count of each guide prior to putting the guides in the cell population. 
+* Transduce the guides into the cell population
+    + one guide per cell (on average)
+    + the guides stably integrate into the genome
+* Count the guides again over a period of time, or after a treatments  
+    + guides that knock out essential genes should deplete
 
--   Size imbalance:
+Caveats with this approach:
+* Guides counts can change within a library due to random chance. Therefore, the key is to identify changes that are significantly
+different from random chance. (references below)
+* Most approaches use some sort of statistical test to assess this. 
+* Most researchers put up with a high false negative and false positive rate as this is just used as a screen. 
 
-    -   Israeli et al is a whole genome (roughly 20K genes targeted) and Cunha et al only targets 833 genes
+Goal of this project:
+* can we identify features that predict whether a gene is 'essential' (assuming no treatment, just the KO and growth). 
 
--   The studies use different guides to target the genes (and only Israeli uses a publicly available library).
+Things to consider for this model building:
+
+Feature Engineering:
+
+We can look both at some transcript intrinsic information to select features. This will likely be closer to the actual biology. Candidate features are:
+
+* Native features 
+    + transcript length (this is the length of the primary mRNA used in this study)
+    + gene length (this is the length of the introns + exons) [Need to get]
+    + total number of exons (only exons go into making mRNAs.)
+    + expression level [Need to get]
+        + note: this will be cell type specific so we would need to incorporate cell type in a fully robust model. 
+    + isoform number
+    + constraint score (this is a proxy for how much nature variation is in a gene) [Need to get]
+
+* Derived features:
+    + transcript length/exon number
+    + gene length/exon number
+    + gene length/transcript length
+
+
+We can also look at aspects of the guides. This is likely less about the biology of the gene being knocked out and more about technical aspects of the library (meaning, things that may lead to artifacts).
+For each gene, there is typically 4 guides, so we may need to consider some aggregate information. 
+
+* Native (per guide) features
+    + PAM sequence used (per guide)
+    + strand used (per guide)
+* Aggregates (per gene)
+    + mean starting count (per gene)
+    + mean final count (per gene)
+    + variance across guides (per gene)
+    + std dev across guides (per gene)
+    + mean quartile starting count (per gene)
+    + mean quartile final count (per gene)
+
+## Challenges
+
+It is very difficult to obtain raw data (that is the raw counts) for various experiments. Therefore, the data we have will be 
+relatively limited. 
 
 ### Proposal
 
-Explore count distribution from Sanson et al., 2018 and Israeli et al., 2022 as both have raw count data from the Brunello library, though they use different cell lines. 
+Use data from Sanson et al., 2018 to identify features and build a model to predict gene essentiality. 
+
+Notes:
+Gene essentiality is likely cell type specific, at least in many cases. It is unclear how well this model will 
+transfer. 
+
+## Notebook breadcrumbs
+
+### Processing Gene and Transcript information
+
+GetTranscriptInfo.ipynb: Notebook for processing some transcript information. 
+
+GetIsoformInformation.ipynb: Notbook for getting isoform counts. 
+
+AnnotateGenes.ipynb: Annotate genes with essentiality status (essential, non-essential or unknown) 
+
+### Data Processing
+Brunello_count_library.ipynb: This is the main notebook that was used for initial EDA analysis. This integrates both transcript information and count information from the brunello library.
+
+
+### Abandoned Dataset
+SARs_Datsets.ipynb: Initial notebook for two datasets obtained from BioGrids. Realize these are not usable datasets as this is only processed data, not raw counts. 
+
+# Task list
+
+As of 2024-10-29, keeping tasks list as github issues. 
 
 
 ## Info from papers
 
-|                              |  Sanson et al., 2018              |    Israeli et al., 2022          |    Cunha et al., 2023                     |
-|------------------------------|-----------------------------------|----------------------------------|-------------------------------------------|
-| **Main question of paper**   | | Developing a new CRISPRko library that can more effectively distinguish between essential and non-essential genes.  Note: they also look at CRISPRi and CRISPRa libraries, but we won't focus on that here. | Understanding cellular factors involved in SARS-CoV-2 infection. (original variant, as well as Alpha and Beta variants) | Understanding of cellular factors involved in SARS-CoV-2 infection. |   Cellular factors involved in SARS-CoV-3 infection |
-|**Cell line used**            | A375 melanoma cell lines          | Calu-3  (human lung cells)        | Calu-3                                      |
-|**Cell Numbers**              |                                   | 400 M                             | 50M                                         |
-|**Library Used**              | Brunello                          | Brunello                          | Custom                                      |
-|**Guide Info**                | 77,441 sgRNA (1000 non-target controls) | 76,441 sgRNAs (1000 non-target controls)| N/A                             |
-|**Avg guide per gene**        | 4                                 | 4                                 |                                             |
-|**Replicates**                | 2-3                               | 2                                 | 2                                           |
-|**Sequence**                  |https://www.ncbi.nlm.nih.gov/sra/PRJNA508200 |                         |                                             |
+|                              |  Sanson et al., 2018              |    Israeli et al., 2022          | 
+|------------------------------|-----------------------------------|----------------------------------|
+| **Main question of paper**   | | Developing a new CRISPRko library that can more effectively distinguish between essential and non-essential genes.  Note: they also look at CRISPRi and CRISPRa libraries, but we won't focus on that here. | Understanding cellular factors involved in SARS-CoV-2 infection. (original variant, as well as Alpha and Beta variants) | Understanding of cellular factors involved in SARS-CoV-2 infection.  |
+|**Cell line used**            | A375 melanoma cell lines          | Calu-3  (human lung cells)                                            |
+|**Cell Numbers**              |                                   | 400 M                                                                     |
+|**Library Used**              | Brunello                          | Brunello                                                             |
+|**Guide Info**                | 77,441 sgRNA (1000 non-target controls) | 76,441 sgRNAs (1000 non-target controls)                            |
+|**Avg guide per gene**        | 4                                 | 4                                                                          |
+|**Replicates**                | 2-3                               | 2                                                                          |
+|**Sequence**                  |https://www.ncbi.nlm.nih.gov/sra/PRJNA508200 |                                                                  |
 
 
 
@@ -39,8 +117,6 @@ Explore count distribution from Sanson et al., 2018 and Israeli et al., 2022 as 
 
 |                     | File                                    | Description                                             |
 |---------------------|-----------------------------------------|---------------------------------------------------------|
-| Cunha et al., 2023  | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
-|                     | jv.01276-23-s0004.xlsx                  | Supplemental table 4 (plasmid vs. d0 gene) MAGeCK output |
 | Israeli et al, 2022 | BIOGRID-ORCS-5622-1.1.16.screen.tab.txt | Table from BioGrid ORCs                                 |
 |                     | PMID35469023-SuppData3.xlsx             | Supplemental table 3 MAGeCK output                      |
 |                     | GSE197962_sgRNA_counts.txt              | Guide counts from                                       |
