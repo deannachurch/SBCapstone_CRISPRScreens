@@ -1,0 +1,5 @@
+2024-10-29 19:14:48 - INFO - Starting gene length calculation: 2024-10-29_19-14-48
+2024-10-29 19:16:42 - INFO - Filtered gene lines: 48104
+2024-10-29 19:20:53 - INFO - Processed gene information: 48104
+2024-10-29 19:21:24 - INFO - Processed gene information: 48104
+2024-10-29 19:24:56 - INFO - Gene information written to ../data/processed/gene_info.csv

@@ -46,6 +46,7 @@ We can look both at some transcript intrinsic information to select features. Th
     + transcript length/exon number
     + gene length/exon number
     + gene length/transcript length
+    + expression level quartiles
 
 
 We can also look at aspects of the guides. This is likely less about the biology of the gene being knocked out and more about technical aspects of the library (meaning, things that may lead to artifacts).
@@ -55,12 +56,12 @@ For each gene, there is typically 4 guides, so we may need to consider some aggr
     + PAM sequence used (per guide)
     + strand used (per guide)
 * Aggregates (per gene)
-    + mean starting count (per gene)
-    + mean final count (per gene)
-    + variance across guides (per gene)
-    + std dev across guides (per gene)
-    + mean quartile starting count (per gene)
-    + mean quartile final count (per gene)
+    + mean starting count (per gene): standardized
+    + mean final count (per gene): standardized
+    + variance across guides (per gene): standardized
+    + std dev across guides (per gene): standardized
+    + mean quartile starting count (per gene): standardized
+    + mean quartile final count (per gene): standardized.
 
 ## Challenges
 
@@ -84,6 +85,8 @@ GetTranscriptInfo.ipynb: Notebook for processing some transcript information.
 GetIsoformInformation.ipynb: Notbook for getting isoform counts. 
 
 AnnotateGenes.ipynb: Annotate genes with essentiality status (essential, non-essential or unknown) 
+
+GetGeneLength.ipynb: Get the full length of each gene.
 
 ### Data Processing
 Brunello_count_library.ipynb: This is the main notebook that was used for initial EDA analysis. This integrates both transcript information and count information from the brunello library.
