@@ -88,6 +88,8 @@ AnnotateGenes.ipynb: Annotate genes with essentiality status (essential, non-ess
 
 GetGeneLength.ipynb: Get the full length of each gene.
 
+CalcGeneExpression_A375_GSE249290.ipyn: estimated mean gene expression across several conditions for A375 cell line. 
+
 ### Data Processing
 Brunello_count_library.ipynb: This is the main notebook that was used for initial EDA analysis. This integrates both transcript information and count information from the brunello library.
 
