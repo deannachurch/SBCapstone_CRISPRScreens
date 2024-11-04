@@ -41,6 +41,7 @@ We can look both at some transcript intrinsic information to select features. Th
         + note: this will be cell type specific so we would need to incorporate cell type in a fully robust model. 
     + isoform number
     + constraint score (this is a proxy for how much nature variation is in a gene) [Need to get]
+    + Targeted Exon 
 
 * Derived features:
     + transcript length/exon number
