@@ -36,7 +36,6 @@ We can look both at some transcript intrinsic information to select features. Th
 * Native features 
     + transcript length (this is the length of the primary mRNA used in this study)
     + gene length (this is the length of the introns + exons) [Need to get]
-    + total number of exons (only exons go into making mRNAs.)
     + expression level [Need to get]
         + note: this will be cell type specific so we would need to incorporate cell type in a fully robust model. 
     + isoform number
@@ -47,22 +46,17 @@ We can look both at some transcript intrinsic information to select features. Th
     + transcript length/exon number
     + gene length/exon number
     + gene length/transcript length
-    + expression level quartiles
+    + count mean quartiles
+    + expression level mean quartiles
 
 
 We can also look at aspects of the guides. This is likely less about the biology of the gene being knocked out and more about technical aspects of the library (meaning, things that may lead to artifacts).
 For each gene, there is typically 4 guides, so we may need to consider some aggregate information. 
 
-* Native (per guide) features
-    + PAM sequence used (per guide)
-    + strand used (per guide)
 * Aggregates (per gene)
     + mean starting count (per gene): standardized
     + mean final count (per gene): standardized
-    + variance across guides (per gene): standardized
     + std dev across guides (per gene): standardized
-    + mean quartile starting count (per gene): standardized
-    + mean quartile final count (per gene): standardized.
 
 ## Challenges
 
