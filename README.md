@@ -1,6 +1,6 @@
 # SBCapstone_CRISPRScreens
 
-Identify features that predict essential and non-essential genes. 
+Can we develop a model to accurately identify essential genes and determine the features that drive the model? 
 
 ## Background
 
@@ -36,10 +36,9 @@ We can look both at some transcript intrinsic information to select features. Th
 * Native features 
     + transcript length (this is the length of the primary mRNA used in this study)
     + gene length (this is the length of the introns + exons) [Need to get]
-    + expression level [Need to get]
+    + expression level
         + note: this will be cell type specific so we would need to incorporate cell type in a fully robust model. 
     + isoform number
-    + constraint score (this is a proxy for how much nature variation is in a gene) [Need to get]
     + Targeted Exon 
 
 * Derived features:
@@ -48,6 +47,8 @@ We can look both at some transcript intrinsic information to select features. Th
     + gene length/transcript length
     + count mean quartiles
     + expression level mean quartiles
+    + constraint score (this is a proxy for how much nature variation is in a gene) [Need to get]
+    + annotation: whether a gene is essential or not based on Hart 2014 (a gold standard list of essential genes)
 
 
 We can also look at aspects of the guides. This is likely less about the biology of the gene being knocked out and more about technical aspects of the library (meaning, things that may lead to artifacts).
@@ -57,6 +58,8 @@ For each gene, there is typically 4 guides, so we may need to consider some aggr
     + mean starting count (per gene): standardized
     + mean final count (per gene): standardized
     + std dev across guides (per gene): standardized
+
+Ended up not using aspects of the guides as we don't have the cut rates in a pooled screen. 
 
 ## Challenges
 

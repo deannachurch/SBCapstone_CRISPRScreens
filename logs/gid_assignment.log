@@ -1886,3 +1886,10 @@ Symbol Matches: 207
 2024-08-25 17:23:39 - INFO - Alias Matchs: 0
 2024-08-25 17:23:39 - INFO - No Matches: 0
 2024-08-25 17:23:39 - INFO - COMPLETE: GID match finished
+2024-12-26 15:53:55 - INFO - Starting GID assignment
+2024-12-26 15:59:04 - INFO - querying 1-291...
+2024-12-26 15:59:05 - INFO - done.
+2024-12-26 15:59:06 - INFO - Finished.
+2024-12-26 15:59:06 - WARNING - 2 input query terms found dup hits:	[('RPSAP9', 2), ('GUSBP4', 2)]
+2024-12-26 15:59:06 - WARNING - 16 input query terms found no hit:	['FAM126A', 'TXLNG2P', 'TSTA3', 'C12orf66', 'NHP2L1', 'SHFM1', 'QARS', 'GTDC2', 'WDR61', 'PRUNE', 'K
+2024-12-26 15:59:06 - INFO - Pass "returnall=True" to return complete lists of duplicate or missing query terms.
