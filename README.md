@@ -1,6 +1,32 @@
-# SBCapstone_CRISPRScreens
+# Analysis of Essential Genes in CRISPR screens
 
-Can we develop a model to accurately identify essential genes and determine the features that drive the model? 
+By using publicly available data for the development of CRISPR guide libraries, I investigated how well count data from the CRISPR screen, as well as data related to gene expression and other information related to genes (as available) allow us to predict gene essentiality. There are numerous caveats to this analysis as detailed below and in the accompanying report. I was able to use a variety of exploratory data analysis approaches, including model comparison to characterize the distribution of the count data. I developed a model to identify essential genes in a CRISPR screening library, and did some post-hoc analysis of the errors to understand characteristics that confound the model. 
+
+## Project Organization
+
+```
+|--LICENSE
+|--README.md
+|--data
+    |-- interim    <---- intermediate data that has been transformed
+    |-- processed  <---- processed data
+    |-- raw        <---- raw, downloaded data
+    |-- reference  <---- reference data (genome annotation, etc)
+|--docs
+|--logs
+|--notebooks
+    |-- AnnotateGenes.ipynb                           <---- add gene essentiality information
+    |-- Brunello_count_library.ipynb                  <---- initiall parsing of count data
+    |-- CalcGeneExpression_A375_GSE249290.ipynb       <---- gather gene expression data
+    |-- FeatureProcessing.ipynb                       <---- Initial feature engineering exploration
+    |-- GetConstraintScores.ipynb                     <---- Process LOEUF scores
+    |-- GetGeneLength.ipynb                           <---- Get gene length info
+    |-- GetIsoformInformation.ipynb                   <---- Get isoform counts
+    |-- GetTranscriptInfo.ipynb                       <---- Get transcript information
+    |-- ModelingAndEvaluation.ipynb                   <---- Modeling building and evaluation
+    |-- SARs_Datasets.ipynb                           <---- Evaluation of an earlier dataset that was a dead end
+
+```
 
 ## Background
 
