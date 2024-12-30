@@ -31,7 +31,7 @@ Guide performance is a critical aspect of CRISPR screening, though this is often
 ## Recommendations:
 
 * Consider using gene expression information when analyzing CRISPR screen information. 
-* Additional considering of count deciles may be useful, as guides in lower deciles may have less drastic count differentials and my be more difficult to interpret. 
+* Additional consideration of count deciles may be useful, as guides in lower deciles may have less drastic count differentials and my be more difficult to interpret. 
 * Additional work in generating 'truth' data may be beneficial in interpreting CRISPR screen data. 
 
 # Background Information
