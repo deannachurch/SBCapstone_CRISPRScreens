@@ -1,0 +1,107 @@
+---
+title: "Capstone Final Report"
+subtitle: "An exploration of CRISPR screen data and gene essentiality"
+date: last-modified
+format:
+    pdf: default
+    html: 
+      self-contained: true
+      grid: 
+        margin-width: 350px
+execute: 
+  echo: fenced
+reference-location: margin
+citation-location: margin
+bibliography: bibliography.bib
+---
+
+# Executive Summary
+
+The goal of this project was to determine if data from CRISPR knockout screens, as well as additional information concerning gene information, can be used to build a predictive model to identify essential genes from non-essential genes. The model construction was successful in a very constrained way. Take home messages:
+
+* gene expression level is an important factor
+    + this is consistent with the literature [@Hart2014-jx]
+* the guide count differential is critical
+    + the guide count not dropping enough can lead to wrong categorization.
+
+## Next steps:
+
+Guide performance is a critical aspect of CRISPR screening, though this is often unknown in a pooled CRISPR screen. Model performance could potentially be improved with additional tuning and parameter selection. 
+
+## Recommendations:
+
+* Consider using gene expression information when analyzing CRISPR screen information. 
+* Additional considering of count deciles may be useful, as guides in lower deciles may have less drastic count differentials and my be more difficult to interpret. 
+* Additional work in generating 'truth' data may be beneficial in interpreting CRISPR screen data. 
+
+# Background Information
+
+CRISPR screens take advantage of the CRISPR-Cas9 system to knock out gene function to understand cellular phenotype in the absence of specific genes. These work by using an RNA that directs the CRISPR complex to a specific sequence in the genome. The complex then creates a double strand break near this site. Cellular DNA repair complexes will attempt to repair this break, typically creating a mutational event that can disrupt gene function. In a pooled CRISPR guides are introduced to a population of cells. These guides are counted at the beginning of the experiment (prior to introduction to the cell) and again at various time points. If a guide disrupts a gene that is essential, the count of that guide will decrease as cells with this event will die. There are many caveats to this approach including:
+
+* incomplete guide efficiency (guides cut with a range of efficiencies)
+* repair events do not always lead to a mutational event. 
+* guides that don't disrupt cell function can decrease in count due to genetic drift. 
+    + they key is identifying events that are significantly different than drift. 
+
+## Challenges
+
+It is difficult to find good CRISPR data. Many of the datasets are already processed and raw count data is not always available. The dataset used in this study was from the development of a new library [@Sanson2018-zi] that was distributed to the community and used for many experiments. Two different version of raw data are available. 
+
+Additionally, it is challenging to understand what an 'essential' gene is. Data from [@Hart2014-jx] were used, as this was an attempt to develop 'Gold Standards' for gene essentiality annotation. However, it is important to consider that essentiality is often contextual- genes that are essential in one cell line or one condition by be non-essential in other context. For this study, we used genes that are considered to be essential in most contexts. However, this meant that most genes in our data set had no annotation.
+
+![Gene Annotation Count](img/annotation_counts.png){height="100"}
+
+# Initial model building
+
+## Full data set
+
+Attempts to use the entire dataset proved challenging. This is likely due to the fact that while feature distributions were clearly different (in many cases) between essential and non-essential genes, the 'uncharacterized' genes overlap both distributions. Figure 2 shows an example of this.
+
+![Mean of the guide count difference by annotation](img/Diff_MeanByAnnot.png){fig-align="left"}
+
+Numerous models were attempted using the full dataset. Including:
+* Decision Tree
+* Random Forest
+* XGBoost
+
+All performed roughly the same, where it was clear there 'Uncagetorized' was dominating the model due to the fact that this class was dominant, and likely contained both essential and non-essential genes. Figure 3 shows an example confusion matrix. 
+
+![Confusion matrix using full dataset in a Random Forest Model](img/FullDataSetRandomForest.png)
+
+## Reduced data 
+
+In an effort to use cleaner data to build the model, all 'Uncategorized' genes were removed. In this scenario, a simple decision tree worked well. One issue that was perplexing is that the 'optimized model' (determined by random search) performed more poorly than an unoptimized gini based model. 
+
+:::{#fig-confusion layout-ncol=2}
+![Unoptimized gini decision tree](img/ginidt_binary.png)
+
+![Optimized decision tree](img/opt_dt_binary.png)
+
+Binary classifier confusion matrix
+:::
+
+In order to test these models, the additional data set from the [@Sanson2018-zi] paper was used. 'Uncategorized' genes were removed and then I attemped to classify genes using the model developed on the first data set from this paper. 
+
+:::{#fig-confusion layout-ncol=2}
+![Unoptimized gini decision tree on unseen data](img/trac1_gini_dtree.png)
+
+![Optimized decision tree on unseen data](img/trac1_opt_dtree.png)
+
+Binary classifier confusion matrix
+:::
+
+## Investing mis-classified genes
+
+In an effort to understand when the model was not performing well, all classifications were aggregated with the true data so a line by line analysis could be performed. These were plotted with respect to the distrubutions of all genes in the set (only 'Essential' and 'Nonessential'). It is clear the genes that are misassigned lie in the part of the distribution that overlaps between the two sets.
+
+![Count differences in unseen data Gini Model](img/trac1_diff_mischaract.png)
+
+![Gene expression in unseen data Gini Model ](img/trac1_exp_mischaract.png)
+
+The overlap of the distributions is where the difficulty lies.
+
+![Essential vs Nonessential genes](img/trac1_diff_mean.png)
+
+## Conclusion
+
+Most analysis of CRISPR screen data utilizes statistical tests to identify genes of interest in the screen. The difficulty in building models to identify genes of interests suggests this continues to be a good strategy. However, the importance of other factors, such as gene expression, suggests that analysis packages could be improved by taking this information into account. 

@@ -1,0 +1,55 @@
+# Model metrics for gene essentiality prediction
+## Best Gini Decision Tree Model
+### Parameters
+Feature	Importance
+cell_exp_mean           0.249596
+exp_mean_decile	        0.137049
+Rep_CPM_mean	        0.097354
+LOEUF	                0.073583
+Diff_mean	            0.067916
+Diff_median	            0.064928
+Tx Length	            0.056785
+Gene Length	            0.053678
+TargetEx2TxLength	    0.048857
+Diff_std	            0.039191
+Gene Isoform Count	    0.038798
+start_count_mean	    0.037388
+Target Exon_min	        0.021267
+start_count_mean_decile	0.01361
+
+### Hyperparameters
+criterion               gini 
+random_state            1338
+
+### Performance
+Accuracy:               1.0
+Balanced accuracy:      1.0
+
+
+## 'Optimized' Model
+### Parameters
+Feature                 Importance
+Diff_median             0.678996
+exp_mean_decile         0.205268
+Rep_CPM_mean            0.069962
+cell_exp_mean           0.023673
+Gene Isoform Count      0.012596
+Diff_std                0.006519
+start_count_mean        0.002986
+Target Exon_min         0.000000
+Tx Length               0.000000
+Gene Length             0.000000
+LOEUF                   0.000000
+TargetEx2TxLength       0.000000
+Diff_mean               0.000000
+start_count_mean_decile 0.000000
+
+### Hyperparameters
+criterion:          gini 
+max_depth:          2
+max_features:       3 
+min_samples_split:  5
+
+### Performance
+Accuracy:           0.9859154929577465
+Balanced accuracy:  0.9634146341463414
