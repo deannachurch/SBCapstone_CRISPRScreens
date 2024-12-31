@@ -21,25 +21,31 @@ The goal of this project was to determine if data from CRISPR knockout screens, 
 
 * gene expression level is an important factor
     + this is consistent with the literature [@Hart2014-jx]
-* the guide count differential is critical
-    + the guide count not dropping enough can lead to wrong categorization.
+    + models trained using gene expression as a parameter rely on this data almost exclusively for prediction.
+* the guide count is the next most important factor
+    + when gene expression is removed as a parameter, this parameter dominates the model
 
 ## Next steps:
 
-Guide performance is a critical aspect of CRISPR screening, though this is often unknown in a pooled CRISPR screen. Model performance could potentially be improved with additional tuning and parameter selection. 
+It is important to note this is just a preliminary exploration. Next steps in this project should include:
+
+* Refactoring code to make model generation and exploration more efficient.
+* Continue exploring parameters that contribute to assessing gene essentiality.
+* Identify addition truth sets for better train/test data. 
 
 ## Recommendations:
 
 * Consider using gene expression information when analyzing CRISPR screen information. 
 * Additional consideration of count deciles may be useful, as guides in lower deciles may have less drastic count differentials and my be more difficult to interpret. 
-* Additional work in generating 'truth' data may be beneficial in interpreting CRISPR screen data. 
+* Evaluate additional models or statistical tests for evaluating CRISPR screens [@Zhao2022-oy].
 
 # Background Information
 
-CRISPR screens take advantage of the CRISPR-Cas9 system to knock out gene function to understand cellular phenotype in the absence of specific genes. These work by using an RNA that directs the CRISPR complex to a specific sequence in the genome. The complex then creates a double strand break near this site. Cellular DNA repair complexes will attempt to repair this break, typically creating a mutational event that can disrupt gene function. In a pooled CRISPR guides are introduced to a population of cells. These guides are counted at the beginning of the experiment (prior to introduction to the cell) and again at various time points. If a guide disrupts a gene that is essential, the count of that guide will decrease as cells with this event will die. There are many caveats to this approach including:
+CRISPR screens take advantage of the CRISPR-Cas9 system to knock out gene function to understand cellular phenotype in the absence of specific genes. These work by using a guide RNA that directs the CRISPR complex to a specific sequence in the genome. The complex then creates a double strand break near this site. Cellular DNA repair complexes will attempt to repair this break, typically creating a mutational event that can disrupt gene function. In a pooled CRISPR guides are introduced to a population of cells. These guides are counted at the beginning of the experiment (prior to introduction to the cell) and again at various time points. If a guide disrupts a gene that is essential, the count of that guide will decrease as cells with this event will die. There are many caveats to this approach including:
 
 * incomplete guide efficiency (guides cut with a range of efficiencies)
 * repair events do not always lead to a mutational event. 
+* off-target events that confound gene level analysis (e.g. the guide inactivates a different gene than intended)
 * guides that don't disrupt cell function can decrease in count due to genetic drift. 
     + they key is identifying events that are significantly different than drift. 
 
@@ -70,38 +76,77 @@ All performed roughly the same, where it was clear there 'Uncagetorized' was dom
 
 ## Reduced data 
 
-In an effort to use cleaner data to build the model, all 'Uncategorized' genes were removed. In this scenario, a simple decision tree worked well. One issue that was perplexing is that the 'optimized model' (determined by random search) performed more poorly than an unoptimized gini based model. 
+In an effort to use cleaner data to build the model, all 'Uncategorized' genes were removed. In this scenario, simple decision trees as well as a tuned decision tree all worked reasonably well, but all were dominated by gene expression as a predictor. 
 
 :::{#fig-confusion layout-ncol=2}
-![Unoptimized gini decision tree](img/ginidt_binary.png)
+![Unoptimized gini decision tree](img/full_binary_gini_cm.png)
 
-![Optimized decision tree](img/opt_dt_binary.png)
+![Unoptimized entropy decision tree](img/full_binary_entropy_cm.png)
 
-Binary classifier confusion matrix
+![Tuned decision tree](img/full_binary_tuned_cm.png)
+
+Binary classifier confusion matrix for full dataset. 
 :::
+For all of these models, the parameter 'cell_exp_mean' (gene expression) had a feature importance of .96 or greater. Given that generally we don't want a feature having more than 0.15 importance, this was investigated further. 
 
-In order to test these models, the additional data set from the [@Sanson2018-zi] paper was used. 'Uncategorized' genes were removed and then I attemped to classify genes using the model developed on the first data set from this paper. 
+# Removing gene expression data
+
+A decision tree model was rebuilt and tuned after removing the gene expression information. This model performed more poorly than the models with the gene expression information, but performance was still reasonable. 
+
+![Tuned decision tree, no gene expression](img/no_exp_tuned_dt_cm.png)
+
+In this case, the parameter importance was dominated by the count differential (with a higher importance than desired) but other factors now come into play.
+
+|Feature	        | Importance |
+|-------------------|:-----------|
+| Diff_mean	        | 0.757254   |
+| LOEUF	            | 0.109975   |
+| Rep_CPM_mean	    | 0.081778   |
+| start_count_mean	| 0.028509   |
+| Gene Length	    | 0.008641   |
+| Gene Isoform Count| 0.007135   |
+| Target Exon_min	| 0.006708   |
+| Tx Length	        | 0          |
+| TargetEx2TxLength	| 0          |
+
+: Feature importance in the absence of gene expression data.
+
+An interesting aspect of the diff_count (this is the guide count difference between the starting time point and the ending time point- aggregated for all replicates) is the noise in this data. For example, here are the count distributions, on a per guide basis for one replicate in the dataset used for training the model.
+
+![Guide distributions RepA](img/RepA_GuideDistributions.png)
+
+While there is some separation between essential and non-essential genes, there is considerable overlap at the edges. The red dots represent non-targeting guides. These are guides that should not lead to any cutting in the genome, but we can see a broad distribution in their individual counts. 
+
+# Testing on a different dataset
+
+Additional testing of the models was performed using the additional data set from the [@Sanson2018-zi] paper. 'Uncategorized' genes were removed and the remaining data was processed by four models to classify genes using the model developed on the first data set from this paper. 
 
 :::{#fig-confusion layout-ncol=2}
-![Unoptimized gini decision tree on unseen data](img/trac1_gini_dtree.png)
-
 ![Optimized decision tree on unseen data](img/trac1_opt_dtree.png)
+
+![Optimized decision tree on unsee data, no expression data](img/trac1_tuned_noexp_cm.png)
 
 Binary classifier confusion matrix
 :::
 
 ## Investing mis-classified genes
 
-In an effort to understand when the model was not performing well, all classifications were aggregated with the true data so a line by line analysis could be performed. These were plotted with respect to the distrubutions of all genes in the set (only 'Essential' and 'Nonessential'). It is clear the genes that are misassigned lie in the part of the distribution that overlaps between the two sets.
+In an effort to understand when the model was not performing well, all classifications were aggregated with the true data so a line by line analysis could be performed. These were plotted with respect to the distrubutions of all genes in the set (only 'Essential' and 'Nonessential'). It is clear the genes that are misclassified lie in the part of the distribution that overlaps between the two sets.
 
-![Count differences in unseen data Gini Model](img/trac1_diff_mischaract.png)
+![Misclassified genes in tuned full model, count differences](img/trac1_tuned_diff_misclassified.png)
 
-![Gene expression in unseen data Gini Model ](img/trac1_exp_mischaract.png)
+![Misclassified genes in tuned full model, gene expression ](img/trac1_tuned_exp_misclassified.png)
 
-The overlap of the distributions is where the difficulty lies.
+![Misclassified genes in the tuned no expression model, count differences](img/trac1_no_exp_mischara_diff.png)
+
+The overlap of the distributions leads to difficulty in classifications.
 
 ![Essential vs Nonessential genes](img/trac1_diff_mean.png)
 
+When comparing individual genes that are misclassified, there is overlap between the sets of genes that are misclassified with the full model. When we remove gene expression information, a new set of genes is now misclassified. 
+
+![Intersection of misclassified genes between models](img/upset_plot.png)
+
 ## Conclusion
 
-Most analysis of CRISPR screen data utilizes statistical tests to identify genes of interest in the screen. The difficulty in building models to identify genes of interests suggests this continues to be a good strategy. However, the importance of other factors, such as gene expression, suggests that analysis packages could be improved by taking this information into account. 
+Most analysis of CRISPR screen data utilizes statistical tests to identify genes of interest in the screen [@Zhao2022-oy]. The difficulty in building models to identify genes of interests suggests this continues to be a good strategy, though perhaps more sophisticated models could be developed. For example, the importance of gene expression levels, suggests that analysis packages could be improved by taking this information into account. 
