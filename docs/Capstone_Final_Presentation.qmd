@@ -1,0 +1,12 @@
+---
+title: "Springboard Capstone Presentation"
+subtitle: "Exploring gene essentiality with CRISPR screens"
+format: 
+    revealjs: 
+        theme: skey
+        slide-number: true
+        chalkboard: 
+            buttons: false
+        footer: Springboard Data Science Course
+---
+
