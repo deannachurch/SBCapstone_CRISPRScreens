@@ -1,12 +1,62 @@
 ---
 title: "Springboard Capstone Presentation"
 subtitle: "Exploring gene essentiality with CRISPR screens"
+author: Deanna M. Church
+date: last-modified
 format: 
     revealjs: 
-        theme: skey
+        theme: simple
         slide-number: true
         chalkboard: 
             buttons: false
         footer: Springboard Data Science Course
 ---
+# Exploring CRISPR Screen Data and Gene Essentiality
 
+![](img/RepA_GuideDistributions.png){fig-align="center" height=400}
+
+# Limited labeled data available
+
+![](img/annotation_counts.png){fig-align="center" height=400}
+
+# Models with full data confounded
+
+::: {.column layout-ncol=2}
+![](img/Diff_MeanByAnnot.png){width=300 fig-align="center"}
+
+![](img/FullDataSetRandomForest.png){width=600 fig-align="center"}
+:::
+
+# Over reliance on a single feature
+Feature importance: gene expression 0.98
+
+![](img/full_binary_tuned_cm.png){fig-align="center" height=350}
+
+# Gene expression is required for essentiality
+
+![](img/gene_expression_by_annotation.png){fig-align="center" height=400}
+
+Consistent with the literature (Hart et al, 2014)
+
+# Removing gene expression worsens performance
+
+![](img/no_exp_tuned_dt_cm.png){fig-align="center" height=300}
+
+Count differential: 0.75 (feature importance)
+
+# Misclassified gene 
+
+![](img/trac1_no_exp_mischara_diff.png){fig-align="center" height=300}
+
+Misclassification not always a problem with overlap distribution. 
+The gene at -15 is an 'essential' gene classified as 'non-essential'
+
+# Misclassified genes differ without expression
+
+![](img/upset_plot.png){fig-align="center" height=400}
+
+# Future work
+
+* Consider using gene expression information when analyzing CRISPR screen information. 
+* Additional consideration of count deciles may be useful, as guides in lower deciles may have less drastic count differentials and my be more difficult to interpret. 
+* Evaluate additional models or statistical tests for evaluating CRISPR screens (Zhao et al., 2022).
